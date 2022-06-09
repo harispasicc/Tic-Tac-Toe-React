@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
-import Navbar from "./components/Navbar";
+import Header from "./components/Header";
 import TicTacToe from "./components/TicTacToe";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <Header />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/tictactoe" element={<TicTacToe />} />

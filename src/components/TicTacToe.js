@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function TicTacToe() {
-  const [turn, setTurn] = useState("Player 1");
+  const [turn, setTurn] = useState("");
   const [cells, setCells] = useState(Array(9).fill(""));
   const [winner, setWinner] = useState();
-  const [tie, setTie] = useState();
+  const [player1, setPlayer1] = useState([]);
+  const [player2, setPlayer2] = useState([]);
 
   const checkForWinner = squares => {
     let combos = {
@@ -39,6 +40,17 @@ function TicTacToe() {
       });
     }
   };
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("Player 1"));
+    if (items) {
+      setPlayer1(items);
+    }
+    const items2 = JSON.parse(localStorage.getItem("Player 2"));
+    if (items2) {
+      setPlayer2(items2);
+    }
+  }, []);
 
   const handleClick = num => {
     if (cells[num] !== "") {
@@ -88,13 +100,12 @@ function TicTacToe() {
           </tr>
         </tbody>
       </table>
-      {winner ||
-        (tie && (
-          <>
-            <p>The {winner} wins</p>
-            <button onClick={() => handleRestart()}>Wanna try again?</button>
-          </>
-        ))}
+      {winner && (
+        <>
+          <p>The {winner} wins!</p>
+          <button onClick={() => handleRestart()}>Wanna try again?</button>
+        </>
+      )}
     </div>
   );
 }

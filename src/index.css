@@ -41,7 +41,8 @@ code {
   text-align: center;
   align-items: center;
   margin-top: 5px;
-  padding: 5px;
+  padding: 8px;
+  width: 80px;
   border: 1px solid #24a0ed;
   border-radius: 4px;
   background-color: #24a0ed;
@@ -53,6 +54,7 @@ code {
   flex-direction: column;
   width: 500px;
   justify-content: center;
+  text-align: center;
   align-items: center;
   }
 
