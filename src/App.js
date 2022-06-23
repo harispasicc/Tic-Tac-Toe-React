@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
-import TicTacToe from "./components/TicTacToe";
+import Game from "./components/Game";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/tictactoe" element={<TicTacToe />} />
+        <Route path="/game" element={<Game />} />
       </Routes>
     </BrowserRouter>
   );

@@ -75,6 +75,16 @@ table td{
   width: 100vw;
 }
 
+.navbar .players{
+  display: flex;
+  padding: 5px;
+}
+
+.player1{
+  margin-right: 20px;
+  
+}
+
 /* @media all and (max-width: 1000px){
   .container {
     display: flex;

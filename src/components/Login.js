@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 
@@ -10,10 +11,14 @@ function Login() {
 
   const startHandler = e => {
     e.preventDefault();
+
+    navigate("/game");
+  };
+
+  useEffect(() => {
     localStorage.setItem("Player 1", JSON.stringify(playerOne));
     localStorage.setItem("Player 2", JSON.stringify(playerTwo));
-    navigate("/tictactoe");
-  };
+  }, [playerOne, playerTwo]);
 
   return (
     <form className="login">
@@ -25,7 +30,6 @@ function Login() {
           name="player1"
           placeholder="Player1"
           onChange={e => setPlayerOne(e.target.value)}
-          required
         />
       </div>
       <div className="input-player2">
@@ -36,11 +40,14 @@ function Login() {
           name="player2"
           placeholder="Player2"
           onChange={e => setPlayerTwo(e.target.value)}
-          required
         />
       </div>
       <div>
-        <button onClick={startHandler} type="submit">
+        <button
+          disabled={!playerOne || !playerTwo}
+          onClick={startHandler}
+          type="submit"
+        >
           Start
         </button>
       </div>
