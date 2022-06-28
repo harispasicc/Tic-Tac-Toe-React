@@ -1,10 +1,13 @@
 import React from "react";
 
-function Board() {
+function Board({ turn, handleClick, cells }) {
+  const Cells = ({ num }) => {
+    return <td onClick={() => handleClick(num)}>{cells[num]}</td>;
+  };
   return (
     <div className="container">
-      <table>
-        Turn: {turn}
+      <table className="turn-title">
+        It is {turn}'s turn
         <tbody>
           <tr>
             <Cells num={0} />

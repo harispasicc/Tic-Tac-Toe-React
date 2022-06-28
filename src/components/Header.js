@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../index.css";
 
-function Navbar() {
-  // const [player1, setPlayer1] = useState("");
-  // const [player2, setPlayer2] = useState("");
-
-  // useEffect(() => {
-  //   const items = JSON.parse(localStorage.getItem("Player 1"));
-  //   if (items) {
-  //     setPlayer1(items);
-  //   }
-  //   const items2 = JSON.parse(localStorage.getItem("Player 2"));
-  //   if (items2) {
-  //     setPlayer2(items2);
-  //   }
-  // }, [player1, player2]);
+function Navbar({ count1, count2, tie, playerF, playerS }) {
   return (
     <nav className="navbar">
       <h1>Tic Tac Toe</h1>
-      <div className="players">
-        {/* <div className="player1">
-          <h3>{player1}:</h3>
+      {playerF && playerS && (
+        <div className="players">
+          <div className="player1">
+            <h3>
+              {playerF}: {count1}
+            </h3>
+          </div>
+          <div>
+            <h3>
+              {playerS}: {count2}
+            </h3>
+          </div>
+          <div className="tie-nav">
+            <h3>Ties: {tie}</h3>
+          </div>
         </div>
-        <div>
-          <h3>{player2}:</h3>
-        </div> */}
-      </div>
+      )}
     </nav>
   );
 }

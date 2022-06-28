@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Header from "./Header";
+import EndGame from "./Endgame";
+import Board from "./Board";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function Game() {
   const [turn, setTurn] = useState("");
@@ -11,10 +16,13 @@ function Game() {
   const [countPl1, setCountPl1] = useState(0);
   const [countPl2, setCountPl2] = useState(0);
   const [countDraw, setCountDraw] = useState(0);
-  const [history, setHistory] = useState([]);
+  const [gameHistory, setGameHistory] = useState([]);
   const [date, setDate] = useState("");
-  const [gameId, setGameId] = useState("");
+  const [gameID, setGameID] = useState("");
   const [newDate, setNewDate] = useState("");
+  const [alreadyChosenMsg, setAlreadyChosenMsg] = useState("");
+  const [gameEndMsg, setGameEndMsg] = useState("");
+  const navigate = useNavigate();
 
   const checkForWinner = (squares, num) => {
     const combi = [
@@ -37,7 +45,7 @@ function Game() {
         if (turn === player1) {
           setWinner(player1);
           setCountPl1(countPl1 + 1);
-        } else {
+        } else if (turn === player2) {
           setWinner(player2);
           setCountPl2(countPl2 + 1);
         }
@@ -46,14 +54,21 @@ function Game() {
       if (cells[num] !== null) {
         setCount(count + 1);
       }
-      if (count === 8) {
-        setDraw("DRAW!");
+
+      if (count === 8 && cells[num] !== "") {
         setCountDraw(countDraw + 1);
+        setDraw("DRAW!");
+      } else if (
+        count === 8 &&
+        countPl1 !== countDraw &&
+        countPl2 !== countDraw
+      ) {
+        setCountDraw(countDraw);
       }
     }
     return null;
   };
-  //pozivanje iz localS
+
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("Player 1"));
     if (items) {
@@ -66,31 +81,39 @@ function Game() {
   }, [player1, player2]);
 
   useEffect(() => {
-    setHistory([
-      ...history,
+    setGameID(gameID + 1);
+    setDate(newDate);
+    setGameHistory([
+      ...gameHistory,
       {
-        date: date,
-        player1: player1,
-        player2: player2,
+        gameId: gameID,
+        date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
+        player1: JSON.parse(localStorage.getItem("Player 1")),
+        player2: JSON.parse(localStorage.getItem("Player 2")),
         winner: winner,
         draw: draw,
       },
     ]);
-  }, []);
+  }, [winner, draw]);
 
   useEffect(() => {
-    localStorage.setItem("history", JSON.stringify(history));
-  }, [history]);
+    localStorage.setItem("history", JSON.stringify(gameHistory));
+  }, [gameHistory]);
 
-  //turns
   const handleClick = num => {
     if (cells[num] !== "") {
-      alert("Choose unoccupied cell!");
+      setAlreadyChosenMsg("Choose unoccupied cell!");
+      setTimeout(() => {
+        setAlreadyChosenMsg(false);
+      }, 3000);
       return;
     }
 
     if (winner && cells[num] === "") {
-      alert("Game has a winner, try again!");
+      setGameEndMsg("Game has a winner, try again!");
+      setTimeout(() => {
+        setGameEndMsg(false);
+      }, 3000);
       setCells(!squares);
     }
 
@@ -106,63 +129,46 @@ function Game() {
     setCells(squares);
   };
 
-  //cells da te tipka
-  const Cells = ({ num }) => {
-    return <td onClick={() => handleClick(num)}>{cells[num]}</td>;
+  const handleTryAgain = () => {
+    setCells(Array(9).fill(""));
+    setCount(0);
+    setTurn(null);
+    setAlreadyChosenMsg("");
+    setGameEndMsg("");
+    setWinner("");
+    setDraw("");
   };
 
   const handleRestart = () => {
-    setWinner(null);
-    setCells(Array(9).fill(""));
-    setDraw(null);
-    setCount(0);
-    setTurn(null);
+    setGameHistory("");
+    setPlayer1("");
+    setPlayer2("");
+    setWinner("");
+    setDraw("");
+    navigate("/");
   };
 
   return (
-    <div className="container">
-      <table>
-        It is {turn}'s turn
-        <tbody>
-          <tr>
-            <Cells num={0} />
-            <Cells num={1} />
-            <Cells num={2} />
-          </tr>
-          <tr>
-            <Cells num={3} />
-            <Cells num={4} />
-            <Cells num={5} />
-          </tr>
-          <tr>
-            <Cells num={6} />
-            <Cells num={7} />
-            <Cells num={8} />
-          </tr>
-        </tbody>
-      </table>
-      {winner && (
-        <>
-          <p>The {winner} wins!</p>
-          <button onClick={() => handleRestart()}>Wanna try again?</button>
-        </>
-      )}
-      {!countPl2 && draw && (
-        <>
-          <p>{draw}</p>
-          <button onClick={() => handleRestart()}>Wanna try again?</button>
-        </>
-      )}
-      {/* {winner && (
-        <p>
-          {player1} vs {player2}
-        </p>
-      )}
-      {winner && <p>{winner} won</p>} */}
-      <p>Haris: {countPl1}</p>
-      <p>Hamza: {countPl2}</p>
-      <p>Ties: {countDraw}</p>
-      <p>::{date}</p>
+    <div>
+      <Header
+        count1={countPl1}
+        count2={countPl2}
+        tie={countDraw}
+        playerF={player1}
+        playerS={player2}
+      />
+      <div className="container">
+        {alreadyChosenMsg && <p className="bg-warning">{alreadyChosenMsg}</p>}
+        {gameEndMsg && <p className="bg-warning">{gameEndMsg}</p>}
+        <Board handleClick={handleClick} cells={cells} turn={turn} />
+      </div>
+      <EndGame
+        win={winner}
+        draws={draw}
+        tryAgain={handleTryAgain}
+        gameHistory={gameHistory}
+        restart={handleRestart}
+      />
     </div>
   );
 }

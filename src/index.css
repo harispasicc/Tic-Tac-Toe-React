@@ -1,4 +1,7 @@
-body {
+/*mobile 320px*/
+@media  (min-width: 320px)
+{
+  body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -18,9 +21,9 @@ code {
   position: absolute;
   border: 2px solid gray;
   width: 200px;
-  height: 20vh;
+  height: 21vh;
   top: 35%;
-  left: 45%;
+  left: 50%;
   margin-top: -100px;
 }
 
@@ -49,6 +52,45 @@ code {
   cursor: pointer;
 }
 
+.win-msg{
+  position: absolute;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border: 3px solid gray;
+  height: 14vh;
+  width: 150px;
+  left: 55%;
+  margin-top: 10%;
+}
+
+.win-msg button{
+  width: 80px;
+  border: 1px solid #24a0ed;
+  border-radius: 4px;
+  background-color: #24a0ed;
+  cursor: pointer;
+}
+
+.draw-msg{
+  position: absolute;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border: 3px solid gray;
+  height: 14vh;
+  width: 150px;
+  left: 55%;
+}
+
+.draw-msg button{
+  width: 80px;
+  border: 1px solid #24a0ed;
+  border-radius: 4px;
+  background-color: #24a0ed;
+  cursor: pointer;
+}
+
 .container{
   display: flex;
   flex-direction: column;
@@ -67,12 +109,15 @@ table td{
 .navbar {
   background: white;
   height: 80px;
-  top: 0;
   z-index: 999;
   box-shadow: 0 2px 4px 0 rgba(68, 66, 66, 0.2);
   display: flex;
   align-items: center;
-  width: 100vw;
+  width: 500px;
+}
+
+.navbar h1{
+  padding: 5px;
 }
 
 .navbar .players{
@@ -85,9 +130,255 @@ table td{
   
 }
 
-/* @media all and (max-width: 1000px){
-  .container {
-    display: flex;
-    justify-content: center;
+.turn-title{
+  margin-top: 10px;
+}
+
+.tie-nav{
+  margin-left: 20px;
+}
+
+.bg-warning {
+  padding: 3px;
+  background-color: yellow;
+  border: 10px;
+  border-radius: 10px;
+  color: black;
+  height: 8vh;
+  width: 50vw;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.history{
+  margin-top: 30%;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  width: 500px;
+  left: 55%;
+}
+
+.messages{
+  margin-top: 17%;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+}
+
+@media  (min-width: 375px){
+  .navbar{
+    width: 100%;
   }
-} */
+  .login{
+    height: 21vh;
+    top: 35%;
+    left: 25%;
+  }
+  .win-msg{
+    left: 48%;
+  }
+
+  .draw-msg{
+    left: 48%;
+  }
+  }
+
+@media  (min-width: 425px){
+  .navbar{
+    width: 100%;
+  }
+  .login{
+    top: 35%;
+    left: 30%;
+  }
+
+  .win-msg{
+    left: 43%;
+  }
+
+  .draw-msg{
+    left: 43%;
+  }
+  }
+
+
+/*tablet 768px*/
+
+@media  (min-width: 768px){
+  .container {
+    margin-left: 15%;
+    margin-top: 20px;
+  }
+
+  .navbar{
+    width: 100%;
+  }
+
+  .navbar h1{
+    padding: 5px;
+  }
+
+  .login{
+    height: 21vh;
+    top: 35%;
+    left: 40%;
+  }
+
+  .win-msg{
+    left: 44%;
+    
+  }
+
+  .draw-msg{
+    left: 44%;
+  }
+
+  .history{
+    margin-top: 15%;
+    margin-left: 18%;
+  }
+
+  .messages{
+    margin-top: 10%;
+  }
+
+  .bg-warning{
+margin-left: 25%;
+  }
+}
+
+/*desktop 1024px*/
+
+@media  (min-width: 1024px){
+  .container {
+    margin-left: 25%;
+    margin-top: 5%;
+  }
+
+  .navbar{
+    width: 100%;
+  }
+
+  .navbar h1{
+    padding: 5px;
+  }
+
+  .win-msg{
+    left: 48%;
+    margin-top: 5%;
+  }
+
+  .draw-msg{
+    left: 48%;
+  }
+  
+  .history{
+    margin-top: 10%;
+    margin-left: 30%;
+  }
+
+  .messages{
+    margin-top: 5%;
+  }
+
+  .bg-warning{
+margin-left: 30%;
+  }
+}
+
+@media  (min-width: 1440px){
+  .container{
+    margin-left: 33%;
+  }
+  .win-msg{
+    left: 51%;
+  }
+
+  .draw-msg{
+    left: 51%;
+  }
+  .history{
+    margin-top: 8%;
+    margin-left: 38%;
+  }
+
+  .messages{
+    margin-top: 4%;
+  }
+
+  .bg-warning{
+margin-left: 30%;
+  }
+}
+
+@media  (min-width: 1800px){
+  .container {
+    margin-left: 40%;
+    margin-top: 5%;
+  }
+  .win-msg{
+    left: 49%;
+  }
+
+  .draw-msg{
+    left: 49%;
+  }
+  .bg-warning{
+    height: 8vh;
+  width: 25vw;
+  }
+}
+
+
+/*desktop 2560px*/
+
+@media  (min-width: 2560px){
+  .container {
+    margin-left: 40%;
+    margin-top: 5%;
+  }
+
+  .navbar{
+    width: 100vw;
+  }
+
+  .navbar h1{
+    padding: 5px;
+  }
+
+  .login{
+    height: 15vh;
+    top: 35%;
+    left: 45%;
+    margin-top: -100px;
+  }
+
+  .win-msg{
+    left: 51%;
+    height: 8vh;
+  }
+
+  .draw-msg{
+    left: 51%;
+  }
+
+  .history{
+    margin-top: 6%;
+    margin-left: 43%;
+  }
+
+  .messages{
+    margin-top: 1%;
+  }
+
+  .bg-warning{
+margin-left: 30%;
+  }
+}
