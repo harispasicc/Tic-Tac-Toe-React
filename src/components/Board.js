@@ -1,31 +1,13 @@
 import React from "react";
+import Square from "./Squares";
+import "../index.css";
 
-function Board({ turn, handleClick, cells }) {
-  const Cells = ({ num }) => {
-    return <td onClick={() => handleClick(num)}>{cells[num]}</td>;
-  };
+function Board({ squares, onClick }) {
   return (
-    <div className="container">
-      <table className="turn-title">
-        It is {turn}'s turn
-        <tbody>
-          <tr>
-            <Cells num={0} />
-            <Cells num={1} />
-            <Cells num={2} />
-          </tr>
-          <tr>
-            <Cells num={3} />
-            <Cells num={4} />
-            <Cells num={5} />
-          </tr>
-          <tr>
-            <Cells num={6} />
-            <Cells num={7} />
-            <Cells num={8} />
-          </tr>
-        </tbody>
-      </table>
+    <div className="board">
+      {squares.map((square, i) => (
+        <Square key={i} value={square} onClick={() => onClick(i)} />
+      ))}
     </div>
   );
 }

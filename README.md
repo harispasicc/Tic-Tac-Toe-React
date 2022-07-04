@@ -1,3 +1,37 @@
+Tic-Tac-Toe Project
+
+Project description
+
+Tic-Tac-Toe (American English), nought and crosses (Commonwealth English),is a paper-and-pencil game for two players, X and O, who take turns marking the spaces in a 3\*3 grid. The player who succeeds in placing three of their marks in a diagonal, horizontal, or vertical row is the winner, It is a solved game with a forced draw assuming best play from poth players.
+
+Below are all the basic requirements:
+
+First of all, players should introduce themselves before the game, Although there is no need for credentials or any kind of authentication, this screen is called a Login screen.
+
+Both players should enter their names in the form fields. The button START has to be the "subrit"button, and will accept as values the players' names, and forward the app to the next screen. Since this is a very simple form with two fields and one (submit) button, this is a great opportunity to learn how to make simple, effective, and clean forms.
+There are some restrictions related to this form: Both players have to enter their names START button should not be enabled if any of the two fields are empty. After entering both names, the START button will forward the app to the Game Screen.
+
+The game is finished when all cells are occupied without a winner, or when one of the players puts three of his signs in the same row, in the same column, or on the same diagonal.
+
+Having displayed the message, the app should show the history of games on the screen. Time delay between the message about the current game and the history of games can be defined by time (for example 5 seconds), or by the user's click After each game, the history will be updated and saved on the local storage.
+
+Project Features:
+
+-Login.js: Contains login auth details
+-Game.js: Contains main logic, buttons, alerts
+-Header.js: Contains navbar
+-Board.js: Contains board and cells
+-CalculateWinner.js: Contains winner logic
+-Squares.js: Conatins value which is imported to Board.js
+-Footer.js Contains author details
+
+Built With:
+
+-HTML
+-CSS
+-JS
+-React JS
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

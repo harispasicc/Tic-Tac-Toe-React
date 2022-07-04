@@ -4,15 +4,16 @@ import EndGame from "./Endgame";
 import Board from "./Board";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { calculateWinner } from "./CalculateWinner";
 
 function Game() {
-  const [turn, setTurn] = useState("");
-  const [cells, setCells] = useState(Array(9).fill(""));
+  const [board, setBoard] = useState(Array(9).fill(""));
+  const [xIsNext, setXisNext] = useState(true);
+  const [oIsNext, setOisNext] = useState(true);
   const [winner, setWinner] = useState("");
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
   const [draw, setDraw] = useState("");
-  const [count, setCount] = useState(0);
   const [countPl1, setCountPl1] = useState(0);
   const [countPl2, setCountPl2] = useState(0);
   const [countDraw, setCountDraw] = useState(0);
@@ -20,54 +21,9 @@ function Game() {
   const [date, setDate] = useState("");
   const [gameID, setGameID] = useState("");
   const [newDate, setNewDate] = useState("");
-  const [alreadyChosenMsg, setAlreadyChosenMsg] = useState("");
-  const [gameEndMsg, setGameEndMsg] = useState("");
+  const [availableSquares, setAvailableSquares] = useState(9);
+
   const navigate = useNavigate();
-
-  const checkForWinner = (squares, num) => {
-    const combi = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < combi.length; i++) {
-      const [a, b, c] = combi[i];
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        if (turn === player1) {
-          setWinner(player1);
-          setCountPl1(countPl1 + 1);
-        } else if (turn === player2) {
-          setWinner(player2);
-          setCountPl2(countPl2 + 1);
-        }
-      }
-
-      if (cells[num] !== null) {
-        setCount(count + 1);
-      }
-
-      if (count === 8 && cells[num] !== "") {
-        setCountDraw(countDraw + 1);
-        setDraw("DRAW!");
-      } else if (
-        count === 8 &&
-        countPl1 !== countDraw &&
-        countPl2 !== countDraw
-      ) {
-        setCountDraw(countDraw);
-      }
-    }
-    return null;
-  };
 
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("Player 1"));
@@ -79,6 +35,8 @@ function Game() {
       setPlayer2(items2);
     }
   }, [player1, player2]);
+
+  localStorage.setItem("history", JSON.stringify(gameHistory));
 
   useEffect(() => {
     setGameID(gameID + 1);
@@ -96,47 +54,37 @@ function Game() {
     ]);
   }, [winner, draw]);
 
-  useEffect(() => {
-    localStorage.setItem("history", JSON.stringify(gameHistory));
-  }, [gameHistory]);
+  const handleClick = i => {
+    const boardCopy = [...board];
+    if (winner || boardCopy[i]) return;
+    boardCopy[i] = xIsNext ? "X" : "O";
+    setBoard(boardCopy);
+    setXisNext(!xIsNext);
+    setAvailableSquares(availableSquares - 1);
+    const win = calculateWinner(boardCopy);
+    if (win === "X") {
+      setWinner(player1);
+      setGameHistory(gameHistory);
 
-  const handleClick = num => {
-    if (cells[num] !== "") {
-      setAlreadyChosenMsg("Choose unoccupied cell!");
-      setTimeout(() => {
-        setAlreadyChosenMsg(false);
-      }, 3000);
-      return;
+      setAvailableSquares(9);
+      setBoard(Array(9).fill(null));
+      setXisNext(xIsNext);
+      setCountPl1(countPl1 + 1);
     }
+    if (win === "O") {
+      setWinner(player2);
+      setGameHistory(gameHistory);
 
-    if (winner && cells[num] === "") {
-      setGameEndMsg("Game has a winner, try again!");
-      setTimeout(() => {
-        setGameEndMsg(false);
-      }, 3000);
-      setCells(!squares);
+      setAvailableSquares(9);
+      setBoard(Array(9).fill(null));
+      setOisNext(oIsNext);
+      setCountPl2(countPl2 + 1);
     }
-
-    let squares = [...cells];
-    if (turn === player1) {
-      squares[num] = "x";
-      setTurn(player2);
-    } else {
-      squares[num] = "o";
-      setTurn(player1);
+    if (availableSquares <= 1 && !win) {
+      setDraw("DRAW!");
+      setCountDraw(countDraw + 1);
+      setGameHistory(gameHistory);
     }
-    checkForWinner(squares);
-    setCells(squares);
-  };
-
-  const handleTryAgain = () => {
-    setCells(Array(9).fill(""));
-    setCount(0);
-    setTurn(null);
-    setAlreadyChosenMsg("");
-    setGameEndMsg("");
-    setWinner("");
-    setDraw("");
   };
 
   const handleRestart = () => {
@@ -148,6 +96,14 @@ function Game() {
     navigate("/");
   };
 
+  const handleTryAgain = () => {
+    setBoard(Array(9).fill(null));
+    setXisNext(true);
+    setWinner("");
+    setDraw("");
+    setAvailableSquares(9);
+  };
+
   return (
     <div>
       <Header
@@ -157,11 +113,11 @@ function Game() {
         playerF={player1}
         playerS={player2}
       />
-      <div className="container">
-        {alreadyChosenMsg && <p className="bg-warning">{alreadyChosenMsg}</p>}
-        {gameEndMsg && <p className="bg-warning">{gameEndMsg}</p>}
-        <Board handleClick={handleClick} cells={cells} turn={turn} />
+      <div className="next-p">
+        <p>{"Next Player: " + (xIsNext && oIsNext ? player1 : player2)}</p>
       </div>
+      <Board squares={board} onClick={handleClick} />
+      <div className="container"></div>
       <EndGame
         win={winner}
         draws={draw}

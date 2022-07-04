@@ -18,12 +18,30 @@ function Login() {
 
   const startHandler = e => {
     e.preventDefault();
-    navigate("/game");
+    if (playerOne === "" && playerTwo === "") {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+      navigate("/game");
+    }
   };
+  const checkreq = () => {
+    if (playerOne.length > 0 && playerTwo.length > 0) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  };
+  useEffect(() => {
+    checkreq();
+  }, [playerOne, playerTwo]);
 
   return (
     <div>
       <Header />
+      <h3 className="login-title">
+        To start game you should fill out empty fields
+      </h3>
       <form className="login">
         <div className="input-player1">
           <p>Player 1</p>
@@ -47,11 +65,7 @@ function Login() {
             required
           />
         </div>
-        <button
-          disabled={!playerOne || !playerTwo}
-          onClick={startHandler}
-          type="submit"
-        >
+        <button disabled={disabled} onClick={startHandler} type="submit">
           Start
         </button>
       </form>

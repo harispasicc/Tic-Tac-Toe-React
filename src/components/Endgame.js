@@ -1,14 +1,6 @@
 import React from "react";
 
-function EndGame({
-  win,
-  draws,
-  count1,
-  count2,
-  tryAgain,
-  restart,
-  gameHistory,
-}) {
+function EndGame({ win, draws, count2, tryAgain, restart, gameHistory }) {
   return (
     <div>
       <div className="messages">
@@ -29,31 +21,21 @@ function EndGame({
       </div>
 
       <div className="history">
-        {gameHistory !== undefined || gameHistory.length !== 0
-          ? gameHistory?.map(
-              ({ date, player1, player2, winner, draw }, index) => (
-                <ul key={index}>
-                  {winner && (
-                    <ul className="won">
-                      {winner !== " " && winner !== null
-                        ? date +
-                          " " +
-                          player1 +
-                          " vs " +
-                          player2 +
-                          " " +
-                          winner +
-                          " won"
-                        : null}
-                    </ul>
-                  )}
-                  {!winner && draw !== " " && draw !== null
-                    ? date + " " + player1 + " vs " + player2 + " " + draw
-                    : null}
-                </ul>
-              )
-            )
-          : null}
+        {gameHistory &&
+          gameHistory.map(({ date, player1, player2, winner, draw }, id) => (
+            <ul key={id}>
+              {winner && (
+                <p>
+                  {date} {player1} vs {player2} {winner} won
+                </p>
+              )}
+              {draw && (
+                <p>
+                  {date} {player1} vs {player2} {draw}
+                </p>
+              )}
+            </ul>
+          ))}
       </div>
     </div>
   );
