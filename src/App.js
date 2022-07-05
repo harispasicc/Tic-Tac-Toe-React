@@ -1,9 +1,9 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Game from "./components/Game";
 
-function App() {
+function App({ playerF, playerS }) {
   return (
     <BrowserRouter>
       <Routes>

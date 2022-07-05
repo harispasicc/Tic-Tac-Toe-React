@@ -22,6 +22,7 @@ function Game() {
   const [gameID, setGameID] = useState("");
   const [newDate, setNewDate] = useState("");
   const [availableSquares, setAvailableSquares] = useState(9);
+  const [unoccupied, setUnoccupied] = useState("");
 
   const navigate = useNavigate();
 
@@ -36,8 +37,9 @@ function Game() {
     }
   }, [player1, player2]);
 
-  localStorage.setItem("history", JSON.stringify(gameHistory));
-
+  if (winner || draw) {
+    localStorage.setItem("history", JSON.stringify(gameHistory));
+  }
   useEffect(() => {
     setGameID(gameID + 1);
     setDate(newDate);
@@ -56,16 +58,28 @@ function Game() {
 
   const handleClick = i => {
     const boardCopy = [...board];
-    if (winner || boardCopy[i]) return;
+    if (winner || boardCopy[i]) {
+      setUnoccupied("Choose unoccupied cell!");
+      setTimeout(() => {
+        setUnoccupied(false);
+      }, 3000);
+
+      return;
+    }
+
     boardCopy[i] = xIsNext ? "X" : "O";
     setBoard(boardCopy);
     setXisNext(!xIsNext);
     setAvailableSquares(availableSquares - 1);
-    const win = calculateWinner(boardCopy);
-    if (win === "X") {
-      setWinner(player1);
-      setGameHistory(gameHistory);
 
+    const win = calculateWinner(boardCopy);
+
+    if (win === "X") {
+      const his1 = JSON.parse(localStorage.getItem("history"));
+      if (his1) {
+        setGameHistory(his1);
+      }
+      setWinner(player1);
       setAvailableSquares(9);
       setBoard(Array(9).fill(null));
       setXisNext(xIsNext);
@@ -73,7 +87,10 @@ function Game() {
     }
     if (win === "O") {
       setWinner(player2);
-      setGameHistory(gameHistory);
+      const his2 = JSON.parse(localStorage.getItem("history"));
+      if (his2) {
+        setGameHistory(his2);
+      }
 
       setAvailableSquares(9);
       setBoard(Array(9).fill(null));
@@ -83,12 +100,15 @@ function Game() {
     if (availableSquares <= 1 && !win) {
       setDraw("DRAW!");
       setCountDraw(countDraw + 1);
-      setGameHistory(gameHistory);
+      const his3 = JSON.parse(localStorage.getItem("history"));
+      if (his3) {
+        setGameHistory(his3);
+      }
     }
   };
 
   const handleRestart = () => {
-    setGameHistory("");
+    setGameHistory(localStorage.removeItem("history"));
     setPlayer1("");
     setPlayer2("");
     setWinner("");
@@ -116,7 +136,13 @@ function Game() {
       <div className="next-p">
         <p>{"Next Player: " + (xIsNext && oIsNext ? player1 : player2)}</p>
       </div>
-      <Board squares={board} onClick={handleClick} />
+      {unoccupied && <p className="bg-warning">{unoccupied}</p>}
+      <Board
+        playerF={player1}
+        playerS={player2}
+        squares={board}
+        onClick={handleClick}
+      />
       <div className="container"></div>
       <EndGame
         win={winner}
